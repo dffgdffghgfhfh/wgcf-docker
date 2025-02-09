@@ -24,7 +24,9 @@ runwgcf() {
   if [ ! -e "wgcf-account.toml" ]; then
     echo "Registering account..."
     wgcf register --accept-tos
-    sleep 10  # 增加延时避免请求过多
+    sleep 30  # 延时避免频繁请求
+  else
+    echo "Account already registered, skipping registration."
   fi
 
   if [ ! -e "wgcf-profile.conf" ]; then
@@ -33,9 +35,17 @@ runwgcf() {
     echo "wgcf-profile.conf generated"
   fi
 
+  # 确保配置文件被正确生成和复制
+  echo "Checking contents of wgcf-profile.conf:"
+  cat wgcf-profile.conf
+
   # 将配置文件复制到 WireGuard 的目录
   cp wgcf-profile.conf /etc/wireguard/wgcf.conf
   echo "wgcf.conf copied to /etc/wireguard/"
+
+  # 检查配置文件是否复制成功
+  echo "Checking if wgcf.conf exists in /etc/wireguard/:"
+  ls -l /etc/wireguard/wgcf.conf
 
   # 获取默认网关和路由
   DEFAULT_GATEWAY_NETWORK_CARD_NAME=$(route | grep default | awk '{print $8}' | head -1)
