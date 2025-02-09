@@ -10,7 +10,7 @@ RUN curl -fsSL git.io/wgcf.sh | bash && mkdir -p /wgcf
 
 WORKDIR /wgcf
 
-VOLUME /wgcf
+#VOLUME /wgcf
 
 COPY entry.sh /entry.sh
 RUN chmod +x /entry.sh
